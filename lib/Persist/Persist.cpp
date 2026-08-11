@@ -1,5 +1,4 @@
 #include <Persist.h>
-#include <Logger.h>
 #include <EEPROM.h>
 
 namespace Persist
@@ -31,13 +30,13 @@ namespace Persist
         data.gateway[3] = 1;
         data.center_orientation = 0;
 
-        Logger.printf("Initializing Persisted Data\n");
+        Serial.printf("Initializing Persisted Data\n");
 
         byte bSig[2];
         bSig[0] = EEPROM.read(0);
         bSig[1] = EEPROM.read(1);
 
-        Logger.printf("Signature read - %d %d\n", bSig[0], bSig[1]);
+        Serial.printf("Signature read - %d %d\n", bSig[0], bSig[1]);
         if (bSig[0] == 'b' && bSig[1] == 'C')
         {
             // read EEPROM now - start with cb!
@@ -46,11 +45,11 @@ namespace Persist
             pb[0] = EEPROM.read(2);
             pb[1] = EEPROM.read(3);
 
-            Logger.printf("Data on EEPROM is %d bytes\n", cbOnDisk);
+            Serial.printf("Data on EEPROM is %d bytes\n", cbOnDisk);
 
             if (cbOnDisk != sizeof(data))
             {
-                Logger.printf("Data size on EEPROM doesn't match the code (%d!=%d). Reverting to default values.\n", cbOnDisk, sizeof(data));
+                Serial.printf("Data size on EEPROM doesn't match the code (%d!=%d). Reverting to default values.\n", cbOnDisk, sizeof(data));
                 write();
             }
             else
@@ -58,24 +57,24 @@ namespace Persist
                 // Don't read more than sizeof(data) or cbOnDisk
                 uint8_t *pbData = (uint8_t *)&data;
                 uint16_t cbToRead = min(cbOnDisk, sizeof(data)) - 2; // -2 because we're not reading cb again
-                Logger.printf("\n");
-                Logger.printf("\n");
+                Serial.println();
+                Serial.println();
                 for (uint16_t i = 0; i < cbToRead; i++)
                 {
                     pbData[i + 2] = EEPROM.read(i + 4); // skip over signature and cb
-                    // Logger.printf("%x ", pbData[i+2]);
+                    // Serial.printf("%x ", pbData[i+2]);
                 }
-                Logger.printf("\n");
-                Logger.printf("\n");
+                Serial.println();
+                Serial.println();
             }
         }
         else
         {
-            Logger.printf("Signature not found - not reading from EEPROM\n");
+            Serial.printf("Signature not found - not reading from EEPROM\n");
             write();
         }
 
-        Logger.printf("cb: %d color: %x pattern: %d \n"
+        Serial.printf("cb: %d color: %x pattern: %d \n"
                       "       static ip: %d  ip addr: %d.%d.%d.%d\n"
                       "       mask: %d.%d.%d.%d gateway: %d.%d.%d.%d\n",
                       data.cb,
@@ -99,7 +98,7 @@ namespace Persist
     void write()
     {
 
-        Logger.printf("Persist::Write with %d bytes\n", data.cb);
+        Serial.printf("Persist::Write with %d bytes\n", data.cb);
 
         for (uint16_t i = 0; i < data.cb; i++)
         {
@@ -110,7 +109,7 @@ namespace Persist
         EEPROM.write(0, 'b');
         EEPROM.write(1, 'C');
 
-        Logger.printf("Persist::Write done\n");
+        Serial.printf("Persist::Write done\n");
     }
 
 }

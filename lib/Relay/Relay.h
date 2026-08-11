@@ -1,7 +1,6 @@
 #ifndef _RELAY_H_
 #define _RELAY_H_
 
-#include "Logger.h"
 #include "Arduino.h"
 
 class GpioRelay
@@ -22,7 +21,7 @@ public:
     {
         digitalWrite(pin_, LOW);
         is_closed_ = false;
-        Logger.println("Setting relay to LOW");
+        Serial.println("Setting relay to LOW");
     }
 
     bool is_closed()
@@ -34,7 +33,7 @@ public:
     {
         digitalWrite(pin_, HIGH);
         is_closed_ = true;
-        Logger.println("Setting relay to HIGH");
+        Serial.println("Setting relay to HIGH");
     }
 
     private:

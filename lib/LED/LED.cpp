@@ -1,7 +1,6 @@
 #include <LED.h>
 #include <Util.h>
 #include <Persist.h>
-#include <Logger.h>
 
 namespace LED {
     // Any group of digital pins may be used
@@ -135,7 +134,7 @@ namespace LED {
 
         static uint8_t hue = 0;
 
-        // Logger.printf("%d\n", hue);
+        // Serial.printf("%d\n", hue);
 
         for(int i = 0; i < NUM_STRIPS; i++) {
             for(int j = 0; j < LEDS_PER_STRIP; j++) {

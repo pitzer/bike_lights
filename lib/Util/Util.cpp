@@ -1,6 +1,6 @@
 
 #include <Arduino.h>
-#include <BranchController.h>
+#include <Controller.h>
 #include <Util.h>
 
 // better debugging. Inspired from https://gist.github.com/asheeshr/9004783 with some modifications

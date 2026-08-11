@@ -6,7 +6,7 @@
 // Best documentation: https://github.com/FastLED/FastLED/wiki/Parallel-Output
 
 #include <Arduino.h>
-#include <BranchController.h>
+#include <Controller.h>
 #include <OctoWS2811.h>
 
 

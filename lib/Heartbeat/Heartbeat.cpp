@@ -1,6 +1,6 @@
 
 #include <Arduino.h>
-#include <BranchController.h>
+#include <Controller.h>
 #include <Util.h>
 #include <Heartbeat.h>
 

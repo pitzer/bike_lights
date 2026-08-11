@@ -3,7 +3,6 @@
 #include <OctoWS2811.h>
 #include <FastLED.h>
 #include <Arduino.h>
-#include <Logger.h>
 
 // This is a version of the parallel, OctoWS2811Controller from FastLED
 // that I modified to be resizable. This means that we can allocate an array
@@ -137,7 +136,7 @@ public:
         pocto = new OctoWS2811(nPixels, framebuffer, drawbuffer, config);
         pocto->begin();
 
-        Logger.printf("Now supporting %d pixels per strip\n", nPixels);
+        Serial.printf("Now supporting %d pixels per strip\n", nPixels);
     }
 
     // change the RGB/GRB order of the strips, at runtime!

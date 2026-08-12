@@ -67,6 +67,42 @@ WS2811_BRG	= 4
 WS2811_BGR	= 5
 
 
+def resolve_pattern_config_path(root, path):
+    current = root
+    for part in path.split('.'):
+        if not part:
+            raise ValueError(f"Invalid pattern config path '{path}'")
+
+        if isinstance(current, dict):
+            if part not in current:
+                raise ValueError(f"Pattern configuration '{path}' is not available")
+            current = current[part]
+            continue
+
+        if not hasattr(current, part):
+            raise ValueError(f"Pattern configuration '{path}' is not available")
+        current = getattr(current, part)
+
+    return current
+
+
+def normalize_pattern_set(selected, config_name):
+    if isinstance(selected, dict):
+        return [selected]
+
+    if isinstance(selected, (list, tuple)):
+        for i, item in enumerate(selected):
+            if not isinstance(item, dict):
+                raise TypeError(
+                    f"Pattern configuration '{config_name}' contains non-dict item at index {i}"
+                )
+        return list(selected)
+
+    raise TypeError(
+        f"Pattern configuration '{config_name}' must resolve to a dict or list/tuple of dicts"
+    )
+
+
 class PatternGenerator:
     def __init__(self, pattern_config, led_config, animation_rate, folder, controller_folder=None):
         self.patterns = {}
@@ -361,22 +397,14 @@ async def main():
                         default=os.path.join(ROOT, "lib", "LED"),
                         help="The folder to output generated controller code files")
     parser.add_argument("--pattern_config", type=str,
-                        choices=["DEFAULT_CONFIG", "BED_CONFIG"],
-                        default=None,
-                        help="The pattern configuration set to use when generating patterns")
+                        default="DEFAULT_CONFIG.rotation",
+                        help="Pattern config path to generate (supports dotted paths, e.g. DEFAULT_CONFIG.rotation)")
     args = parser.parse_args()
     led_config = json.load(args.led_config)
 
-    if args.pattern_config:
-        config_name = args.pattern_config
-    elif 'bed' in args.led_config.name.lower():
-        config_name = 'BED_CONFIG'
-    else:
-        config_name = 'DEFAULT_CONFIG'
-
-    pattern_set = getattr(pattern_config, config_name, None)
-    if pattern_set is None:
-        raise ValueError(f"Pattern configuration '{config_name}' is not available")
+    config_name = args.pattern_config or "DEFAULT_CONFIG.rotation"
+    selected_config = resolve_pattern_config_path(pattern_config, config_name)
+    pattern_set = normalize_pattern_set(selected_config, config_name)
 
     os.makedirs(args.folder, exist_ok=True)
 

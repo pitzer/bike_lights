@@ -34,15 +34,15 @@ typedef struct
     if (p.file)                                                                   \
     {                                                                             \
         p.file.read(&p.header, sizeof(p.header));                                 \
-        Serial.printf("magic: %X\\n", p.header.magic);                           \
-        Serial.printf("color_ordering: %d\\n", p.header.color_ordering);         \
-        Serial.printf("num_pixels: %d\\n", p.header.num_pixels);                 \
-        Serial.printf("animation_steps: %d\\n", p.header.animation_steps);       \
-        Serial.printf("animation_period_s: %d\\n", p.header.animation_period_s); \
+        Serial.printf("magic: %X\n", p.header.magic);                           \
+        Serial.printf("color_ordering: %d\n", p.header.color_ordering);         \
+        Serial.printf("num_pixels: %d\n", p.header.num_pixels);                 \
+        Serial.printf("animation_steps: %d\n", p.header.animation_steps);       \
+        Serial.printf("animation_period_s: %d\n", p.header.animation_period_s); \
     }                                                                             \
     else                                                                          \
     {                                                                             \
-        Serial.println("Failed to open file from SD card.");                     \
+        Serial.printf("Failed to open %s from SD card.\n", p.filepath);     \
     }
 
 // Static function to count total number of LEDs addressed by the pattern.

@@ -194,12 +194,6 @@ namespace LED {
 
     }
 
-    void openPixelClientConnection(bool f) {
-
-        fOpenPixelClientConnected = f;
-    
-    }
-
     void show() {
         leds.show();
     }

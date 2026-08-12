@@ -23,7 +23,6 @@ namespace LED {
     void setPixel(int strip, int led, uint8_t r, uint8_t g, uint8_t b);
     void testPattern();
     bool togglePower();
-    void openPixelClientConnection(bool f);
     void CalculateFrameRate();
     void show();
 

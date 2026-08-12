@@ -10,3 +10,7 @@ branchController.code-workspace
 patterns
 tools/media
 tools/__pycache__
+lib/LED/generated_led_config.h
+lib/LED/generated_led_config.cpp
+lib/LED/generated_led_patterns.h
+lib/LED/generated_led_patterns.cpp

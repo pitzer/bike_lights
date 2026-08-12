@@ -1,5 +1,5 @@
-#ifndef LED_ARRAY_H
-#define LED_ARRAY_H
+#ifndef LED_STRING_H
+#define LED_STRING_H
 
 #include "led_pattern.h"
 #include "led_palette.h"
@@ -11,8 +11,6 @@
 //
 // The number of LED channels that we are managing
 const uint32_t num_led_channels = 8;
-// The number of LED zones
-const uint32_t num_zones = 4;
 // The maximum number of LEDs per LED string
 const uint32_t max_leds_per_channel = 512;
 // The total number of LEDs
@@ -20,18 +18,14 @@ const uint32_t max_leds = num_led_channels * max_leds_per_channel;
 // Special value to use the current channel
 const uint32_t CHANNEL_CURRENT = 0xFFFFFFFF;
 
-const uint32_t num_strings = 5;
-
-#define ZONE_CAGE 0
-#define ZONE_CENTER 1
-#define ZONE_FRONT 2
-#define ZONE_HEADBOARD 3
+// The number of LED strings. Defined in generated controller code.
+extern const uint32_t num_strings;
 
 //
 // Typedefs
 //
 // Descriptor for a segment of an LED string. A segment is a continues set of LED elements.
-// Multiple segments form a string. Each segment belongs to a zone.
+// Multiple segments form a string.
 typedef struct
 {
     // The name of the segment.
@@ -40,8 +34,6 @@ typedef struct
     uint32_t num_leds;
     // Offset in number of LEDs where the segment starts within the LED string.
     uint32_t string_offset;
-    // The zone this segment belongs to.
-    uint8_t zone;
 } led_segment_t;
 
 // Descriptor for an LED string. A string is a set of segments connected in series.
@@ -57,15 +49,6 @@ typedef struct
     led_segment_t *segments;
     // The output channel this string is attached to.
     uint8_t channel;
-} led_string_t;
-
-// Descriptor of a zone. A zone consists of multiple LED segments,
-// potentially accross multiple LED strings. Each zone has a unified
-// pattern and brightness.
-typedef struct
-{
-    // The name of the zone.
-    const char *name;
     // The index of the pattern currently driving the LEDs
     uint32_t led_pattern_index;
     // The index of the pattern currently being displayed on the screen
@@ -78,15 +61,13 @@ typedef struct
     uint32_t palette_index;
     // The period of the pattern update in milliseconds
     uint32_t update_period_ms;
-    // The brightness of the zone
+    // The brightness of the string
     uint8_t brightness;
-} led_zone_t;
+} led_string_t;
 
 //
 // Globals
 //
-// The set of LED zones
-extern led_zone_t led_zones[];
 // The set of LED strings
 extern led_string_t led_strings[];
 // The currently selected LED channel
@@ -118,4 +99,4 @@ constexpr uint32_t segments_in_string(const led_segment_t (&led_segments)[N])
     return N;
 }
 
-#endif // LED_PALETTE_H
+#endif // LED_STRING_H

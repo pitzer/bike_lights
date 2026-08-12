@@ -1,8 +1,7 @@
 #include <LED.h>
 #include <Util.h>
 #include <Persist.h>
-#include "led_array.h"
-#include "cached_patterns/cached_pattern.h"
+#include "led_string.h"
 
 namespace LED {
     // Any group of digital pins may be used
@@ -121,13 +120,12 @@ namespace LED {
             for (uint32_t j = 0; j < led_string->num_segments; j++)
             {
                 led_segment_t *segment = &led_string->segments[j];
-                led_zone_t *zone = &led_zones[segment->zone];
-                led_patterns[zone->led_pattern_index]
+                led_patterns[led_string->led_pattern_index]
                     .update(
                         now,
-                        zone->update_period_ms,
-                        composed_palette(&led_palettes[zone->palette_index], zone->single_color),
-                        zone->single_color,
+                        led_string->update_period_ms,
+                        composed_palette(&led_palettes[led_string->palette_index], led_string->single_color),
+                        led_string->single_color,
                         i,
                         j,
                         segment->num_leds,
@@ -135,10 +133,10 @@ namespace LED {
                 for (uint32_t k = segment->string_offset; k < segment->string_offset + segment->num_leds; k++)
                 {
                     uint32_t color_u32 = 0x000000;
-                    leds_crgb[k].nscale8(zone->brightness);
+                    leds_crgb[k].nscale8(led_string->brightness);
                     // The green LEDs are stronger than the other colors. Dim them a little bit to help with color balance.
                     leds_crgb[k].g = scale8(leds_crgb[k].g, 200);
-                    switch (zone->color_ordering)
+                    switch (led_string->color_ordering)
                     {
                     case WS2811_RGB:
                         color_u32 = leds_crgb[k].r << 16 | leds_crgb[k].g << 8 | leds_crgb[k].b;

@@ -4,6 +4,7 @@
 #include <MTP_Teensy.h>
 #include <Controller.h>
 #include <Util.h>
+#include "generated_led_patterns.h"
 
 const int SD_ChipSelect = BUILTIN_SDCARD;
 
@@ -16,14 +17,7 @@ namespace SdMTP
         if (SD.begin(SD_ChipSelect))
         {
             Serial.println("SD Card initialized");
-            // CACHED_PATTERN_LOAD(abstract_gradient);
-            // CACHED_PATTERN_LOAD(blue_light_rays);
-            // CACHED_PATTERN_LOAD(color_roll);
-            // CACHED_PATTERN_LOAD(fire);
-            // CACHED_PATTERN_LOAD(flash);
-            // CACHED_PATTERN_LOAD(matrix);
-            // CACHED_PATTERN_LOAD(rainbow);
-            // CACHED_PATTERN_LOAD(space_warp);
+            generated_led_patterns_load();
 
             // Start MTP
             MTP.begin();

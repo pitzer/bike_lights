@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <Controller.h>
 
-namespace MTP
+namespace SdMTP
 {
     void setup();
     void loop();

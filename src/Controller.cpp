@@ -8,7 +8,7 @@
 #include <Heartbeat.h>
 #include <Util.h>
 #include <LED.h>
-#include <MTP.h>
+#include <SdMTP.h>
 #include <Persist.h>
 
 void setup() {
@@ -19,7 +19,7 @@ void setup() {
     Heartbeat::setup();
     Util::setup();
     Persist::setup();
-    MTP::setup();
+    SdMTP::setup();
     LED::setup();
     
     Serial.println("BranchController Setup Complete");
@@ -29,6 +29,6 @@ void setup() {
 
 void loop() {
     Heartbeat::loop();
-    MTP::loop();
+    SdMTP::loop();
     LED::loop();
 }

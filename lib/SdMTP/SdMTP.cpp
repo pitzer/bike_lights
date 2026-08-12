@@ -9,7 +9,7 @@
 
 const int SD_ChipSelect = BUILTIN_SDCARD;
 
-namespace MTP
+namespace SdMTP
 {
 
     void setup(void)

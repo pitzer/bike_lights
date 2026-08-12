@@ -5,8 +5,6 @@
 #include <Controller.h>
 #include <Util.h>
 
-#include <MTP.h>
-
 const int SD_ChipSelect = BUILTIN_SDCARD;
 
 namespace SdMTP

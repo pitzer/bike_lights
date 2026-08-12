@@ -1,6 +1,8 @@
 #include <LED.h>
 #include <Util.h>
 #include <Persist.h>
+#include "led_array.h"
+#include "cached_patterns/cached_pattern.h"
 
 namespace LED {
     // Any group of digital pins may be used
@@ -112,45 +114,60 @@ namespace LED {
 
     void loop() {
 
-        if (!fPowerOn)
+        uint32_t now = millis();
+        for (uint32_t i = 0; i < num_strings; i++)
         {
-            show_color(BLACK);;
-            return;
-        }
+            led_string_t *led_string = &led_strings[i];
+            for (uint32_t j = 0; j < led_string->num_segments; j++)
+            {
+                led_segment_t *segment = &led_string->segments[j];
+                led_zone_t *zone = &led_zones[segment->zone];
+                led_patterns[zone->led_pattern_index]
+                    .update(
+                        now,
+                        zone->update_period_ms,
+                        composed_palette(&led_palettes[zone->palette_index], zone->single_color),
+                        zone->single_color,
+                        i,
+                        j,
+                        segment->num_leds,
+                        leds_crgb + segment->string_offset);
+                for (uint32_t k = segment->string_offset; k < segment->string_offset + segment->num_leds; k++)
+                {
+                    uint32_t color_u32 = 0x000000;
+                    leds_crgb[k].nscale8(zone->brightness);
+                    // The green LEDs are stronger than the other colors. Dim them a little bit to help with color balance.
+                    leds_crgb[k].g = scale8(leds_crgb[k].g, 200);
+                    switch (zone->color_ordering)
+                    {
+                    case WS2811_RGB:
+                        color_u32 = leds_crgb[k].r << 16 | leds_crgb[k].g << 8 | leds_crgb[k].b;
+                        break;
+                    case WS2811_RBG:
+                        color_u32 = leds_crgb[k].r << 16 | leds_crgb[k].b << 8 | leds_crgb[k].g;
+                        break;
+                    case WS2811_GRB:
+                        color_u32 = leds_crgb[k].g << 16 | leds_crgb[k].r << 8 | leds_crgb[k].b;
+                        break;
+                    case WS2811_GBR:
+                        color_u32 = leds_crgb[k].g << 16 | leds_crgb[k].b << 8 | leds_crgb[k].r;
+                        break;
+                    case WS2811_BRG:
+                        color_u32 = leds_crgb[k].b << 16 | leds_crgb[k].r << 8 | leds_crgb[k].g;
+                        break;
+                    case WS2811_BGR:
+                        color_u32 = leds_crgb[k].b << 16 | leds_crgb[k].g << 8 | leds_crgb[k].r;
+                        break;
+                    default:
+                        color_u32 = 0x000000;
+                        break;
+                    }
 
-        if (fOpenPixelClientConnected)
-        {
-            // let the protocol drive the LEDs
-            return;
-        }
-        
-        if (pattern == patternSolid)
-        {
-            show_color(rgbSolidColor);
-            return;
-        }
-
-        // This is the test pattern:
-
-        static uint8_t hue = 0;
-
-        // Serial.printf("%d\n", hue);
-
-        for(int i = 0; i < NUM_STRIPS; i++) {
-            for(int j = 0; j < LEDS_PER_STRIP; j++) {
-                // setPixel(i, j, make_color_hsl((32*i) + hue+j,100,100));
-                setPixel(i, j, make_color_rgb(hue, 0, 0));
+                    leds.setPixel(led_string->channel * max_leds_per_channel + k, color_u32);
+                }
             }
         }
-
-        // // Set the first n leds on each strip to show which strip it is
-        // for(int i = 0; i < NUM_STRIPS; i++) {
-        //     for(int j = 0; j <= i; j++) {
-        //         setPixel(i , j, make_color_rgb(0x65,0x43,0x21));
-        //     }
-        // }
-
-        hue++;
+ 
 
         // instead of calling show(), we call delay() which guarantees to call show()
         // but also gives FastLED a chance to do some temporal dithering.

@@ -1,0 +1,3 @@
+aiofile
+numpy==1.26.2
+-e git+https://github.com/pitzer/funky_lights.git@main#egg=funky_lights

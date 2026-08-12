@@ -7,3 +7,6 @@
 branchController.code-workspace
 .vscode/c_cpp_properties.json
 .vscode/launch.json
+patterns
+tools/media
+tools/__pycache__

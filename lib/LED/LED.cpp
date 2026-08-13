@@ -2,6 +2,7 @@
 #include <Util.h>
 #include <Persist.h>
 #include "led_string.h"
+#include <GPS.h>
 
 namespace LED {
     // Any group of digital pins may be used
@@ -113,7 +114,7 @@ namespace LED {
 
     void loop() {
 
-        uint32_t now = millis();
+        uint64_t current_time = GPS::absoluteTimeMs();
         for (uint32_t i = 0; i < num_strings; i++)
         {
             led_string_t *led_string = &led_strings[i];
@@ -122,7 +123,7 @@ namespace LED {
                 led_segment_t *segment = &led_string->segments[j];
                 led_patterns[led_string->led_pattern_index]
                     .update(
-                        now,
+                        current_time,
                         led_string->update_period_ms,
                         composed_palette(&led_palettes[led_string->palette_index], led_string->single_color),
                         led_string->single_color,

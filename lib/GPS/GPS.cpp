@@ -5,6 +5,8 @@
 
 static const int RXPin = 0, TXPin = 1;
 static const uint32_t GPSBaud = 115200;
+static uint64_t epochOffsetMs = 0;
+static bool epochOffsetValid = false;
 
 TinyGPSPlus gps;
 
@@ -37,6 +39,16 @@ namespace GPS
         }
     }
 
+    uint64_t absoluteTimeMs()
+    {
+        if (!epochOffsetValid)
+        {
+            epochOffsetMs = (uint64_t)now() * 1000ULL - (uint64_t)millis();
+            epochOffsetValid = true;
+        }
+        return epochOffsetMs + (uint64_t)millis();
+    }
+
     void setTeensyTimeFromGPS()
     {
         // Extract UTC time and date
@@ -53,7 +65,9 @@ namespace GPS
         // Sync the hardware RTC built into the Teensy
         Teensy3Clock.set(now());
 
-        // Serial.println("Teensy RTC updated via GPS UTC time!");
+        // Update the epoch offset for absolute time calculations
+        epochOffsetMs = (uint64_t)now() * 1000ULL - (uint64_t)millis();
+        epochOffsetValid = true;
     }
 
     void displayInfo()
@@ -109,5 +123,6 @@ namespace GPS
         }
 
         Serial.println();
+        // Serial.printf("millis() = %lu, Teensy3Clock.get() = %lu, now() = %lu\n", millis(), Teensy3Clock.get(), now());
     }
 }

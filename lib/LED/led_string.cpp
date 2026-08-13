@@ -2,6 +2,7 @@
 #include <EEPROM.h>
 
 uint32_t current_channel = 0;
+uint32_t led_pattern_index = 0;
 
 static const uint16_t magic = 0xCAFE;
 

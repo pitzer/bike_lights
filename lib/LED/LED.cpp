@@ -3,6 +3,7 @@
 #include <Persist.h>
 #include "led_string.h"
 #include <GPS.h>
+#include <Button.h>
 
 namespace LED {
     // Any group of digital pins may be used
@@ -112,16 +113,44 @@ namespace LED {
         setPixel(strip, led, make_color_rgb(r, g, b));
     }
 
+    void advancePattern()
+    {
+        const uint32_t total_patterns = num_led_patterns();
+        if (total_patterns == 0)
+        {
+            Serial.println("Button pressed, no patterns available");
+            return;
+        }
+
+        led_pattern_index = (led_pattern_index + 1) % total_patterns;
+        Serial.printf("Button pressed, global pattern index: %lu\n", led_pattern_index);
+    }
+
     void loop() {
 
+        if (Button::wasPressed())
+        {
+            advancePattern();
+        }
+
         uint64_t current_time = GPS::absoluteTimeMs();
+        const uint32_t total_patterns = num_led_patterns();
+        if (total_patterns == 0)
+        {
+            return;
+        }
+        if (led_pattern_index >= total_patterns)
+        {
+            led_pattern_index = 0;
+        }
+
         for (uint32_t i = 0; i < num_strings; i++)
         {
             led_string_t *led_string = &led_strings[i];
             for (uint32_t j = 0; j < led_string->num_segments; j++)
             {
                 led_segment_t *segment = &led_string->segments[j];
-                led_patterns[led_string->led_pattern_index]
+                led_patterns[led_pattern_index]
                     .update(
                         current_time,
                         led_string->update_period_ms,

@@ -217,8 +217,6 @@ extern led_string_t led_strings[];
                 f"        .num_segments = segments_in_string({var_name}),\n"
                 f"        .segments = {var_name},\n"
                 f"        .channel = {string_group['channel']},\n"
-                "        .led_pattern_index = 0,\n"
-                "        .ui_pattern_index = 0,\n"
                 "        .single_color = CRGB::Red,\n"
                 "        .color_ordering = WS2811_GRB,\n"
                 "        .palette_index = 0,\n"

@@ -49,10 +49,6 @@ typedef struct
     led_segment_t *segments;
     // The output channel this string is attached to.
     uint8_t channel;
-    // The index of the pattern currently driving the LEDs
-    uint32_t led_pattern_index;
-    // The index of the pattern currently being displayed on the screen
-    uint32_t ui_pattern_index;
     // The color for non-palette patterns
     CRGB single_color;
     // The color ordering of the strip. Uses the OctoWS2811 constants
@@ -72,6 +68,8 @@ typedef struct
 extern led_string_t led_strings[];
 // The currently selected LED channel
 extern uint32_t current_channel;
+// The currently selected global LED pattern index.
+extern uint32_t led_pattern_index;
 // Temporary buffer to render LEDs of a channel.
 extern CRGB leds_crgb[max_leds_per_channel];
 

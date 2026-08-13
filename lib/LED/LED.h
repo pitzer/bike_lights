@@ -17,6 +17,7 @@ namespace LED {
     void setup();
     void load_persistant_data();
     void loop();
+    void advancePattern();
 
     void setSolidColor(int rgb);
     void setPixel(int strip, int led, int rgb);

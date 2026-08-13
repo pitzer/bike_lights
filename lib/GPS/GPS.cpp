@@ -5,8 +5,11 @@
 
 static const int RXPin = 0, TXPin = 1;
 static const uint32_t GPSBaud = 115200;
+static const uint32_t timeSyncPeriodMs = 60000;
 static uint64_t epochOffsetMs = 0;
 static bool epochOffsetValid = false;
+static uint32_t lastTimeSyncMs = 0;
+static bool hasSyncedTime = false;
 
 TinyGPSPlus gps;
 
@@ -32,8 +35,14 @@ namespace GPS
             {
                 if (gps.date.isValid() && gps.time.isValid() && gps.time.isUpdated() && gps.time.age() < 500)
                 {
-                    setTeensyTimeFromGPS();
-                    displayInfo();
+                    uint32_t nowMs = millis();
+                    if (!hasSyncedTime || (nowMs - lastTimeSyncMs) >= timeSyncPeriodMs)
+                    {
+                        setTeensyTimeFromGPS();
+                        lastTimeSyncMs = nowMs;
+                        hasSyncedTime = true;
+                        displayInfo();
+                    }
                 }
             }
         }

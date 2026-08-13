@@ -10,6 +10,7 @@
 #include <LED.h>
 #include <SdMTP.h>
 #include <Persist.h>
+#include <GPS.h>
 
 void setup() {
 
@@ -21,6 +22,7 @@ void setup() {
     Persist::setup();
     SdMTP::setup();
     LED::setup();
+    GPS::setup();
     
     Serial.println("BranchController Setup Complete");
 }
@@ -31,4 +33,5 @@ void loop() {
     Heartbeat::loop();
     // SdMTP::loop();
     LED::loop();
+    GPS::loop();
 }

@@ -180,6 +180,7 @@ namespace LED {
         cFrames++;
         if (millis() > (tmFrameStart + 1000))
         {
+            Serial.printf("Frame rate: %u\n", cFrames);
             cFrames = 0;
             tmFrameStart = millis();
         }

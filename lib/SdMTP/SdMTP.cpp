@@ -20,8 +20,8 @@ namespace SdMTP
             generated_led_patterns_load();
 
             // Start MTP
-            MTP.begin();
-            MTP.addFilesystem(SD, "SD_Card");
+            // MTP.begin();
+            // MTP.addFilesystem(SD, "SD_Card");
         }
     }
 

@@ -14,13 +14,13 @@ namespace Button {
 
 	static bool readPressedRaw()
 	{
-		// Momentary switch wired to GND with internal pull-up enabled.
-		return digitalRead(pinMomentarySwitch) == LOW;
+		// Momentary switch wired to 3.3 V with internal pull-down enabled.
+		return digitalRead(pinMomentarySwitch) == HIGH;
 	}
 
 	void setup(void)
 	{
-		pinMode(pinMomentarySwitch, INPUT_PULLUP);
+		pinMode(pinMomentarySwitch, INPUT_PULLDOWN);
 
 		bool pressed = readPressedRaw();
 		stablePressed = pressed;

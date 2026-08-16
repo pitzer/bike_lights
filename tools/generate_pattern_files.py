@@ -210,11 +210,14 @@ extern led_string_t led_strings[];
                 "\n".join(segment_entries) +
                 "\n};"
             )
+
+            string_num_leds = sum(segment['num_leds'] for segment in string_group['segments'])
+            string_num_segments = len(string_group['segments'])
             string_entries.append(
                 "    {\n"
                 f"        .name = {quote(string_group['name'])},\n"
-                f"        .num_leds = leds_in_string({var_name}),\n"
-                f"        .num_segments = segments_in_string({var_name}),\n"
+                f"        .num_leds = {string_num_leds},\n"
+                f"        .num_segments = {string_num_segments},\n"
                 f"        .segments = {var_name},\n"
                 f"        .channel = {string_group['channel']},\n"
                 "        .single_color = CRGB::Red,\n"

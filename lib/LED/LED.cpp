@@ -7,21 +7,21 @@
 
 namespace LED {
     // Any group of digital pins may be used
-    byte pinList[NUM_STRIPS] = {2, 14, 7, 8, 6, 20, 21, 5};
+    byte pinList[num_led_channels] = {2, 14, 7, 8, 6, 20, 21, 5};
 
 
     // These buffers need to be large enough for all the pixels.
-    // The total number of pixels is "LEDS_PER_STRIP * NUM_STRIPS".
+    // The total number of pixels is "max_leds_per_channel * num_led_channels".
     // Each pixel needs 3 bytes, so multiply by 3.  An "int" is
     // 4 bytes, so divide by 4.  The array is created using "int"
     // so the compiler will align it to 32 bit memory.
     const int bytesPerLED = 3;  // change to 4 if using RGBW
-    DMAMEM int displayMemory[LEDS_PER_STRIP * NUM_STRIPS * bytesPerLED / 4];
-    int drawingMemory[LEDS_PER_STRIP * NUM_STRIPS * bytesPerLED / 4];
+    DMAMEM int displayMemory[max_leds_per_channel * num_led_channels * bytesPerLED / 4];
+    int drawingMemory[max_leds_per_channel * num_led_channels * bytesPerLED / 4];
 
     const int config = WS2811_RGB | WS2811_800kHz;
 
-    OctoWS2811 leds(LEDS_PER_STRIP, displayMemory, drawingMemory, config, NUM_STRIPS, pinList);
+    OctoWS2811 leds(max_leds_per_channel, displayMemory, drawingMemory, config, num_led_channels, pinList);
 
 
     enum Pattern pattern = patternTest;
@@ -106,7 +106,7 @@ namespace LED {
     }
 
     void setPixel(int strip, int led, int rgb) {
-        leds.setPixel((strip*LEDS_PER_STRIP) + led, rgb);
+        leds.setPixel((strip * max_leds_per_channel) + led, rgb);
     }
 
     void setPixel(int strip, int led, uint8_t r, uint8_t g, uint8_t b) {

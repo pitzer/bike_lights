@@ -1,5 +1,9 @@
 #pragma once
 
+#include <Arduino.h>
+
+constexpr uint8_t pinMomentarySwitch = 22;
+
 // Debounced momentary button API.
 // Call setup() once during startup, then call loop() each main loop cycle.
 namespace Button {

@@ -1,22 +1,11 @@
 #ifndef LED_STRING_H
 #define LED_STRING_H
 
+#include "LED.h"
 #include "led_pattern.h"
 #include "led_palette.h"
 #include <OctoWS2811.h>
 #include <stdint.h>
-
-//
-// Constants
-//
-// The number of LED channels that we are managing
-const uint32_t num_led_channels = 8;
-// The maximum number of LEDs per LED string
-const uint32_t max_leds_per_channel = 512;
-// The total number of LEDs
-const uint32_t max_leds = num_led_channels * max_leds_per_channel;
-// Special value to use the current channel
-const uint32_t CHANNEL_CURRENT = 0xFFFFFFFF;
 
 // The number of LED strings. Defined in generated controller code.
 extern const uint32_t num_strings;

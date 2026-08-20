@@ -1,14 +1,5 @@
 #pragma once
 
-#define pinHeartbeat    LED_BUILTIN
-#define pinMomentarySwitch 22
-
-#define NUM_STRIPS         8
-#define LEDS_PER_STRIP 550
-// Pin layouts for LEDs will be: 2,14,7,8,6,20,21,5
-
-#define BRIGHTNESS 32
-
 #define RED    0xFF0000
 #define GREEN  0x00FF00
 #define BLUE   0x0000FF

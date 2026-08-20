@@ -9,6 +9,12 @@
 #include <Controller.h>
 #include <OctoWS2811.h>
 
+// The number of LED channels that we are managing.
+static constexpr uint32_t num_led_channels = 8;
+// The maximum number of LEDs per LED string.
+static constexpr uint32_t max_leds_per_channel = 512;
+// The total number of LEDs.
+static constexpr uint32_t max_leds = num_led_channels * max_leds_per_channel;
 
 namespace LED {
 

@@ -8,53 +8,37 @@ import sys
 from aiofile import async_open
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-LOCAL_FUNKY_LIGHTS = os.path.abspath(os.path.join(ROOT, "..", "funky_lights", "controller"))
+LOCAL_FUNKY_LIGHTS = os.path.abspath(os.path.join(ROOT, "..", "funky_lights"))
+LOCAL_FUNKY_LIGHTS_CONTROLLER = os.path.join(LOCAL_FUNKY_LIGHTS, "controller")
 
 
 def _add_local_funky_lights_to_path():
-    if os.path.isdir(LOCAL_FUNKY_LIGHTS):
-        if LOCAL_FUNKY_LIGHTS not in sys.path:
-            sys.path.insert(0, LOCAL_FUNKY_LIGHTS)
-        return True
-    return False
+    added = False
+    for candidate in (LOCAL_FUNKY_LIGHTS, LOCAL_FUNKY_LIGHTS_CONTROLLER):
+        if os.path.isdir(candidate) and candidate not in sys.path:
+            sys.path.insert(0, candidate)
+            added = True
+    return added
 
 
 def _import_pattern_packages():
+    if not _add_local_funky_lights_to_path():
+        raise ImportError(
+            "Could not find the local funky_lights repo at: {}".format(
+                LOCAL_FUNKY_LIGHTS
+            )
+        )
+
     try:
         from controller.core.pattern_cache import PatternCache
         from controller.patterns import pattern_config
         return PatternCache, pattern_config
-    except ModuleNotFoundError:
-        pass
-
-    try:
-        from funky_lights.controller.core.pattern_cache import PatternCache
-        from funky_lights.controller.patterns import pattern_config
-        return PatternCache, pattern_config
-    except ModuleNotFoundError:
-        pass
-
-    if _add_local_funky_lights_to_path():
-        try:
-            from controller.core.pattern_cache import PatternCache
-            from controller.patterns import pattern_config
-            return PatternCache, pattern_config
-        except ModuleNotFoundError:
-            pass
-
-        try:
-            from funky_lights.controller.core.pattern_cache import PatternCache
-            from funky_lights.controller.patterns import pattern_config
-            return PatternCache, pattern_config
-        except ModuleNotFoundError:
-            pass
-
-    raise ImportError(
-        "Could not import pattern packages from funky_lights. "
-        "Install the package with requirements.txt or ensure the local funky_lights repo exists at: {}".format(
-            LOCAL_FUNKY_LIGHTS
-        )
-    )
+    except ModuleNotFoundError as exc:
+        raise ImportError(
+            "Could not import pattern packages from the local funky_lights repo at: {}".format(
+                LOCAL_FUNKY_LIGHTS
+            )
+        ) from exc
 
 PatternCache, pattern_config = _import_pattern_packages()
 

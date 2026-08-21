@@ -163,7 +163,7 @@ namespace LED {
                 for (uint32_t k = segment->string_offset; k < segment->string_offset + segment->num_leds; k++)
                 {
                     uint32_t color_u32 = 0x000000;
-                    leds_crgb[k].nscale8(led_string->brightness);
+                    leds_crgb[k].nscale8(brightness);
                     // The green LEDs are stronger than the other colors. Dim them a little bit to help with color balance.
                     leds_crgb[k].g = scale8(leds_crgb[k].g, 200);
                     switch (led_string->color_ordering)
@@ -190,7 +190,6 @@ namespace LED {
                         color_u32 = 0x000000;
                         break;
                     }
-
                     leds.setPixel(led_string->channel * max_leds_per_channel + k, color_u32);
                 }
             }

@@ -16,6 +16,8 @@ static constexpr uint32_t max_leds_per_channel = 512;
 // The total number of LEDs.
 static constexpr uint32_t max_leds = num_led_channels * max_leds_per_channel;
 
+static constexpr uint32_t brightness = 50;
+
 namespace LED {
 
     enum Pattern { patternSolid = 0, patternTest  };    // more  patterns can be added here

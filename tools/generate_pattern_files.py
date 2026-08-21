@@ -384,7 +384,7 @@ async def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--led_config", type=argparse.FileType('r'),
-                        default="led_config_rad.json", help="LED config file")
+                        default="led_config_coat_ben.json", help="LED config file")
     parser.add_argument("-a", "--animation_rate", type=int,
                         default=20, help="The target animation rate in Hz")
     parser.add_argument("-f", "--force_update", action='store_true',
